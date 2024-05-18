@@ -133,7 +133,7 @@ cd $HOME/autonomous_mobile_manipulation_ws/rtabmap/build && make install && \
 cd $HOME/autonomous_mobile_manipulation_ws/fcl/build && make install
 ```
 
-### Simulation using gazebo
+### Run the Sanding Project
 
 ```
 # Terminal 1 - Launch Simulation 
@@ -144,44 +144,15 @@ ROS_NAMESPACE="bvr_SIM" roslaunch robowork_moveit_config robowork_moveit_plannin
 
 # Terminal 3 - Visualization (If not already running for the real robot)
 roslaunch robowork_moveit_config moveit_rviz.launch
-```
 
-Example Case A) Launch a sample MoveIt! planning pipeline - This is a general test to give goal commands to the mobile robot and the manipulator end-effector
-```
-# Terminal A1 - Launch robowork_planning sample node (vTest)
+# Terminal 4 - Launch robowork_planning sample node (vTest)
 ROS_NAMESPACE="bvr_SIM" roslaunch robowork_planning move_group_interface_vTest.launch robot_namespace:=bvr_SIM arm_namespace:=main_arm_SIM sim_suffix:=_SIM
 
-# Terminal A2 - Publish a goal pose in the 'map' frame for the mobile robot
-rostopic pub --once -s /rviz_2d_nav_goal geometry_msgs/PoseStamped "{header: {seq: 0, stamp: now, frame_id: 'map'}, pose: {position: {x: 0.75, y: 0, z: 0}, orientation: {x: 0, y: 0, z: 0, w: 1}}}"
+# Terminal 5 - Run Sanding project
+rosrun robowork_perception sanding.py
 
-# The move_base node will immediately start planning and moving to execute the goal 
+# Script to Generate the offset CSV point is in gazebo_resources/model_facets - run the offset.py
 
-# Terminal A3 (option i) - Publish a goal position in the 'map' frame for the end-effector
-rostopic pub --once -s /endeffector_goal_position geometry_msgs/PointStamped "{header: {seq: 0, stamp: now, frame_id: 'map'}, point: {x: 1.75, y: 0, z: 0.75}}"
-
-# Terminal A3 (option ii) - Publish a goal pose (position & orientation) in the 'map' frame for the end-effector
-rostopic pub --once -s /endeffector_goal_pose geometry_msgs/PoseStamped "{header: {seq: 0, stamp: now, frame_id: 'map'}, pose: {position: {x: 1.75, y: 0, z: 0.75}, orientation: {x: 0, y: 0.383, z: 0, w: 0.924}}}"
-
-# On Terminal A1 you should see a message from the move_group_interface_vTest node:
-# "move_group_interface: New PointStamped goal in frame [map] received!"
-
-# The move_group_interface_vTest node will initiate planning execution once you press 'Next' on Rviz to trigger it.
-# Alternatively you can achieve the same thing by publishing a ROS topic on Terminal A3:
-rostopic pub --once -s /rviz_visual_tools_gui sensor_msgs/Joy "{header: {seq: 0, stamp: now, frame_id: 'map'}, buttons: [0,1,0,0,0,0]}"
-```
-
-Example Case B) Launch a sample MoveIt! planning pipeline - This is based on the ```master``` branch environment that contains an AprilTag marker  
-```
-# Terminal B - Launch robowork_planning sample node (vAprilTag)
-ROS_NAMESPACE="bvr_SIM" roslaunch robowork_planning move_group_interface_vAprilTag.launch robot_namespace:=bvr_SIM arm_namespace:=main_arm_SIM sim_suffix:=_SIM
-
-# Press 'Next' on Rviz to trigger planning to reach AprilTag
-```
-
-Example Case C) Launch Compliance and Jog the end-effector
-```
-# Terminal C1 - Launch ur5e_compliance
-ROS_NAMESPACE="bvr_SIM" roslaunch robowork_ur_launch ur5e_compliance.launch robot_namespace:=bvr_SIM arm_namespace:=main_arm_SIM
 
 # Terminal C2 - Enable compliance
 rosservice call /compliance_controller/toggle_compliance "{}"
