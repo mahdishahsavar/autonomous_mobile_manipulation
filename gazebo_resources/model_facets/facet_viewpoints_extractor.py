@@ -228,12 +228,12 @@ def main():
     print("Writing to csv file...")
     with open(args.csv_file, 'w') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
-        writer.writerow(['x', 'y', 'z', 'qx', 'qy', 'qz', 'qw'])
+        writer.writerow(['x', 'y', 'z', 'nx', 'ny', 'nz'])
         for i in range(len(centers)):
-            writer.writerow([centers[i,0], centers[i,1], centers[i,2], quat[i,0], quat[i,1], quat[i,2], quat[i,3]])
+            writer.writerow([centers[i,0], centers[i,1], centers[i,2], normals[i,0], normals[i,1], normals[i,2]])
     print("Done.")
-    # plot_centers_and_normals(centers, quat)
-    # plot_centers_and_normal_line(centers, normals)
+    plot_centers_and_normals(centers, quat)
+    plot_centers_and_normal_line(centers, normals)
     # plot the mesh
     # plot_3d_mesh(triset, centers, normals)
 
