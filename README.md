@@ -153,9 +153,3 @@ rosrun robowork_perception sanding.py
 
 # Script to Generate the offset CSV point is in gazebo_resources/model_facets - run the offset.py
 
-
-# Terminal C2 - Enable compliance
-rosservice call /compliance_controller/toggle_compliance "{}"
-
-# Move the interactive_marker_3d_twist on Rviz to command jogging references
-```
